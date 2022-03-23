@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube</title>
+    <script src="https://kit.fontawesome.com/yourcode.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<style>
+    #navbar{
+        position: absolute;
+        top: 3%;
+        left: 50%;
+        width: 1500px;
+        height: 50px;
+        transform: translate(-50%,-50%);
+        display: inline-flex;
+        background-color: transparent;
+    }
+    #container{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 1450px;
+        height: 625px;
+        transform: translate(-50%,-50%);
+        display: grid;
+        grid-template-columns: repeat(3,1fr);
+        grid-gap: 10px;
+        background-color: transparent;
+
+    }
+    #container_1{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 1450px;
+        height: 625px;
+        transform: translate(-50%,-50%);
+        display: grid;
+        grid-template-columns: repeat(3,1fr);
+        grid-gap: 10px;
+        background-color: transparent;
+
+    }
+</style>
+<body>
+    <div id="navbar"> 
+        <img src="https://cdn.mos.cms.futurecdn.net/8gzcr6RpGStvZFA2qRt4v6.jpg" style="width: 100px;height: 50px;" onclick= "window.location.href='index.html';">
+ 
+
+        <input type="text" style="width: 400px;height: 20px;margin-top: 1%;margin-left: 30%" id="name">
+        <button class="btn" style="height: 27px;margin-top: 1%;width: 40px;" onclick="getdata()"><i class="fa fa-search"></i></button>
+    </div>
+    <div id="container">
+
+    </div>
+ 
+    
+</body>
+</html>
+
+
+
+<script>
+
+    
+var container = document.getElementById("container");
+const getdata = async ()=> {
+    try{
+        let inp = document.getElementById("name").value;
+        let res = await fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&q=${inp}&key=AIzaSyBLMy-nPEIOBU74lo361N1HzFQHKRyGIdY`);
+        let data = await res.json();
+        
+        append_data(data);
+        normal_data(data);
+
+    }catch(error){
+        console.log(error);
+    }
+    
+   
+}
+
+const data = async ()=> {
+    try{
+        let inp = document.getElementById("name").value;
+        let res = await fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&regionCode=IN&key=AIzaSyBLMy-nPEIOBU74lo361N1HzFQHKRyGIdY`);
+        let data = await res.json();
+        
+        console.log(data);
+        normal_data(data);
+
+    }catch(error){
+        console.log(error);
+    }
+    
+   
+}
+data();
+
+const normal_data = (data)=>{
+
+    //console.log(data);
+    document.getElementById("container").innerHTML = null;
+    data.items.map((element)=>{
+        
+        let main_div = document.createElement("div");
+
+
+        let poster = document.createElement("img");
+       poster.src = element.snippet.thumbnails.high.url;
+
+       let title = document.createElement("h4");
+       title.textContent = element.snippet.title;
+
+
+       let id = document.createElement("h5");
+       id.textContent =  element.snippet.channelTitle;
+
+
+
+       let iframe =  document.createElement("iframe");
+       iframe.src = `https://www.youtube.com/embed/${element.id.videoId}`;
+
+       
+
+
+       main_div.append(poster,title,id);
+       container.append(main_div);
+
+       poster.onclick=()=>{
+            localStorage.setItem("video",JSON.stringify(element.id.videoId));
+            window.location.href = "video.html";
+            
+        }
+
+    });
+
+}
+
+
+const  append_data = (data)=>{
+    console.log(data);
+    document.getElementById("container").innerHTML = null;
+    data.items.map((element)=>{
+        
+        let main_div = document.createElement("div");
+
+
+        let poster = document.createElement("img");
+       poster.src = element.snippet.thumbnails.high.url;
+
+       let title = document.createElement("h4");
+       title.textContent = element.snippet.title;
+
+
+       let id = document.createElement("h5");
+       id.textContent =  element.snippet.channelTitle;
+
+
+
+       let iframe =  document.createElement("iframe");
+       iframe.src = `https://www.youtube.com/embed/${element.id.videoId}`;
+
+       
+
+
+       main_div.append(poster,title,id);
+       container.append(main_div);
+
+       poster.onclick=()=>{
+            localStorage.setItem("video",JSON.stringify(element.id.videoId));
+            window.location.href = "video.html";
+            
+        }
+
+    });
+
+}
+
+
+</script>
